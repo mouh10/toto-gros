@@ -1,5 +1,9 @@
 pipeline {
   agent any
+
+  environment {
+      def mvn = tool 'M3';
+  }
   
   stages {
     stage('SCM') {
@@ -9,8 +13,7 @@ pipeline {
     }
     stage('SonarQube Analysis') {
       steps{
-        def mvn = tool 'M3';
-        withSonarQubeEnv() {
+        withSonarQubeEnv('sonar-server') {
         sh "${mvn}/bin/mvn clean verify sonar:sonar -Dsonar.projectKey=toto-gros -Dsonar.projectName='toto-gros'"
       }
     }
